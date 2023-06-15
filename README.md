@@ -4,7 +4,7 @@ Practical information about Neuropixels recordings for the 2023 course compiled 
 
 These pages have some materials and references for anyone wanting to dig into how to build a setup, understand how data are acquired, and preprocess data.
 
-Here are the **cheatsheets** for [hardware reference](sheets/recording_system_overview.png) and [sychronization with external hardware](sheets/sync_overview.png).
+Here are the **cheatsheets** for [hardware reference](sheets/recording_system_overview.png) and [synchronization with external hardware](sheets/sync_overview.png).
 
 # Hardware description
 
@@ -14,7 +14,7 @@ The recording hardware is modular, we will describe what different parts of the 
 3. the headstage, and
 4. the basestation (a.k.a. Neuropixels module)
 
-<img src="images/probes_illustration.png" width="700">
+<img src="images/probes_illustration.png" width="900">
 
 The main difference between Neuropixels and typical recording devices is that the electrodes and digitizers are combined using CMOS technology in an Application Specific Integrated Circuit (ASIC).
 
@@ -56,7 +56,7 @@ The headstage for Neuropixels 2.0 can carry 2 probes thus enabling recordings fr
 
 There are 2 systems to record with neuropixels, the PXI system and the Onebox. The latter is not available yet so we'll describe the PXI in detail.
 
-The **PXI system** consist of:
+The **PXI system** consists of:
  1. a chassis, to hold all acquisition components (like the PXIe-1083)
  2. the neuropixels module (that is purchased from imec)
  3. a data acquisition card (DAQ - like the PXIe-6341)
@@ -68,7 +68,6 @@ The **neuropixels module** is an FPGA device that handles syncronization and rea
 The image below is a quick reference for how to interpret the LED's in the device.
 
 <img src="images/neuropixels_module_illustration.png" width="700">
-
 
 # Syncronizing data with external streams
 
@@ -95,23 +94,54 @@ Use the interpolation function to align the other events or extrapolate the corr
 
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
-# Binary files and memory mapping
+# Binary files and data storage
+
+SpikeGLX stores raw data in binary files **.bin** accompanied by a text file **.meta** that contains information about the recording. It is useful to understand how data are stored and how to access raw data directly.
 
 Binary files are not only used by SpikeGLX, they are common for many imaging and data acquisition applications. They are specially good for cases when you want to record data fast, and without compression, so you can quickly access it.
 
-SpikeGLX stores raw data in binary files **.bin** accompanied by a text file **.meta** that contains information about the recording.
-
 In binary files, data are stored sample by sample with **16-bit precision**.
 
-<img src="images/bin_stream.png" width="800">
+<img src="images/bin_stream.png" width="500">
 
 These can be reshaped as an array.
 
-<img src="images/bin_array.png" width="500">
+<img src="images/bin_array.png" width="300">
 
+One advantage of binary file formats is that one can access a data chunk of time quickly and can "memory map" the file so it looks like it is loaded in memory.
 
+To memory map a file in python and plot raw data:
+```python
 
+import numpy as np # to map the file and handle types
+import os # needed to figure out the number of samples
 
+fname = 'ephys_g0_t0.imec1.ap.bin'  # path to the binary file
+dtype = np.dtype('int16')  # for spikeglx recordings 
+nchannels = 385 # spikeglx recordings from 1.0 and 2.0
+
+# calculate the sample size from the filesize
+nsamples = os.path.getsize(fname)/(nchannels*dtype.itemsize)
+dat = np.memmap(fname,
+                mode='r', # open in read mode (safe)
+                dtype=dtype,
+                shape = (int(nsamples),int(nchannels)))
+```
+
+And for plotting data straight out of the file:
+
+```python
+import pylab as plt # for plotting
+#lets plot 1 second of data for every 20 channels on the probe 
+srate = 30000 # this should always be read from the metadata file
+time_offset = 300 # lets take the samples from around 5min into the recording
+idx = np.arange(srate).astype(int)
+for i,ichan in enumerate(range(0,dat.shape[1],20)):
+    y = dat[idx+int(time_offset*srate),ichan].astype('float32')
+    #subtract the mean (for plotting)
+    y -= y.mean()
+    plt.plot(idx/srate,y+i*200,'k')
+```
 
 
 # Probe handling and soldering
@@ -121,7 +151,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
  - probes are safer in the box; **test first with the probes in the box**. Connect a headstage to the flex of the probe while it is in the box if you need to test it.
  - touch a grounded piece of metal **before touching probes** to prevent electrostatic discharge.
  - always **align the shank to the axis of probe insertion** (manipulator). This can be done by carefully aligning the probes or using the probe cap and holder.  
- - tapeing probes to a table is a way of safely ways to solder it. Make sure not to heat-up the flex (use a toothpick to elevate the flex if needed).
+ - tapeing probes to a table is a way of safely soldering it, as you can easily secure it. Make sure not to heat-up the flex (use a toothpick to elevate the flex if needed).
 
 [General soldering tips](http://billkarsh.github.io/SpikeGLX/help/solder/solder/) from Bill Karsh
 
@@ -162,7 +192,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 |Kilosort spike sorting algorithm | Sorting | [Kilosort](https://github.com/MouseLand/Kilosort)| Marius Pachitarius|
 |MountainSort spike sorting algorithm | Sorting | [MountainSort](https://github.com/flatironinstitute/mountainsort5) | Jeremy Magland|
 |IronClust spike sorting algorithm | Sorting| [IronClust](https://github.com/flatironinstitute/ironclust) | James Jun and Jeremy Magland |
-|Tutorial on how to use Phy for manual curation |  **Manual curation** | [Manual curation with phy](https://phy.readthedocs.io/en/latest/sorting_user_guide/) | Nick Steinmetz |
+|**Tutorial on how to use Phy for manual curation** |  Manual curation | [Manual curation with phy](https://phy.readthedocs.io/en/latest/sorting_user_guide/) | Nick Steinmetz |
 | Allen Visual Coding neuropixels tutorial| Tutorial |  [Allen Neuropixels](https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html) | Allen Institute|
 | Tutorial to look at data with CellExplorer| Tutorial | [Cell Explorer](https://cellexplorer.org/tutorials/neuropixels-tutorial/) | Peter Petersen|
 
