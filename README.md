@@ -6,45 +6,6 @@ These pages have some materials and references for anyone wanting to dig into ho
 
 Here are the **cheatsheets** for [hardware reference](sheets/recording_system_overview.png) and [sychronization with external hardware](sheets/sync_overview.png).
 
-#### References for harware:
-
-| Resource | Category | Link | Maintainer |
-| --- | --- | --- | --- |
-|Purchase probes and hardware | **Hardware** | [Neuropixels.org](https://www.neuropixels.org/) | imec |
-|What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
-|**MANUAL for the 3.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
-
-#### References for acquisition software:
-
-| Resource | Category | Link | Maintainer |
-| --- | --- | --- | --- |
-|Download software, overall reference, how-to videos | **Software** | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh|
-| Download and use software | Software |  [Open-ephys PXI](https://open-ephys.github.io/gui-docs/User-Manual/Plugins/Neuropixels-PXI.html) | Josh Siegle|
-
-
-#### General references and courses:
-| Resource | Category | Link | Maintainer |
-| --- | --- | --- | --- |
-| Neuropixels wiki | General/Getting started |  [Neuropixels WIKI](https://github.com/cortex-lab/neuropixels/wiki) | Nick Steinmetz |
-| Ask for help, share knowledge, stay up to date | **General/Slack** | [Neuropixels Slack](https://neuropixelsgroup.slack.com/join/shared_invite/zt-1jibcdbhe-uNyp8q522L4S0apVKwoC6A#/shared-invite/email) | Community? |
-|UCL course Youtube videos | **General/Getting started** | [UCL courses](https://www.youtube.com/channel/UCChkhcGBVElY8KLqIYc00gw/playlists) | Cortex Lab|
-|Allen Mindscope and ephys course | In-person course | [Allen course](https://alleninstitute.org/events/2022-neuropixels-and-openscope-workshop/) | Allen Institute|
-|General course with Neuropixels workshop | In-person course (general) | [Optical Imaging and Electrophysiological Recording in Neuroscience](https://parisneuro.ovh/) | Boris Barbour |
-
-#### References for post-processing and analysis:
-
-| Resource | Category | Link | Maintainer |
-| --- | --- | --- | --- |
-|Pipeline to do preprocessing with SpikeGLX tools | **Post-processing and sorting** | [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting)| Jennifer Colonell|
-|Tutorial of how to sort neuropixels with SpikeInterface | **Post-processing and sorting** | [SpikeInterface](https://spikeinterface.readthedocs.io/en/latest/how_to/analyse_neuropixels.html) | SpikeInterface team|
-|Allen pipeline for spike sorting | Post-processing and sorting | [ecephys](https://github.com/AllenInstitute/ecephys_spike_sorting) | Allen Institute|
-|Kilosort spike sorting algorithm | Sorting | [Kilosort](https://github.com/MouseLand/Kilosort)| Marius Pachitarius|
-|MountainSort spike sorting algorithm | Sorting | [MountainSort](https://github.com/flatironinstitute/mountainsort5) | Jeremy Magland|
-|IronClust spike sorting algorithm | Sorting| [IronClust](https://github.com/flatironinstitute/ironclust) | James Jun and Jeremy Magland |
-|Tutorial on how to use Phy for manual curation |  **Manual curation** | [Manual curation with phy](https://phy.readthedocs.io/en/latest/sorting_user_guide/) | Nick Steinmetz |
-| Allen Visual Coding neuropixels tutorial| Tutorial |  [Allen Neuropixels](https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html) | Allen Institute|
-| Tutorial to look at data with CellExplorer| Tutorial | [Cell Explorer](https://cellexplorer.org/tutorials/neuropixels-tutorial/) | Peter Petersen|
-
 # Hardware description
 
 The recording hardware is modular, we will describe what different parts of the system are for and how they are different from other systems:
@@ -53,7 +14,7 @@ The recording hardware is modular, we will describe what different parts of the 
 3. the headstage, and
 4. the basestation (a.k.a. Neuropixels module)
 
-![picture](images/probes_illustration.png)
+<img src="images/probes_illustration.png" width="700">
 
 The main difference between Neuropixels and typical recording devices is that the electrodes and digitizers are combined using CMOS technology in an Application Specific Integrated Circuit (ASIC).
 
@@ -106,7 +67,7 @@ Of course you'll also need a computer. The [hardware requirements](https://githu
 The **neuropixels module** is an FPGA device that handles syncronization and reads data from the headstages. It can connect to up to 8 NP2.0 probes or 4 NP1.0.
 The image below is a quick reference for how to interpret the LED's in the device.
 
-![picture](images/neuropixels_module_illustration.png)
+<img src="images/neuropixels_module_illustration.png" width="700">
 
 
 # Syncronizing data with external streams
@@ -118,18 +79,18 @@ In the PXI system, this can be done in 2 ways:
  1. the neuropixel module can receive a sync signal (e.g. the trial start) that gets recorded with the probe streams. This signal can then be used to know when an external event happened in the time base of the neural signals.
  2. **preferred** - the neuropixels module can send a signal when the probe starts acquiring data, that signal is then used to trigger all streams and to correct for any drift in clock between the streams. One can then connect multiple external signals and capture those in the same corrected time base. 
 
-![picture](images/sync_handling.png)
+<img src="images/sync_handling.png" width="600">
 
 
 **Clock drift** happens when recording with multiple streams or using different clocks. It is more visible in long recordings so if triggering each trial one may not see it.
 
-![picture](images/sync_clocks.png)
 
+ <img src="images/sync_clocks.png" width="500">
 
 The times of one stream (2) need to be corrected to the timing of the other stream (1).
 A solution is to interpolate the onsets of the SMA pulse (in the neuropixels module) or another sync pulse generator that is captured on all streams.
-
-![picture](images/sync_fix.png)
+ 
+<img src="images/sync_fix.png" width="500">
 
 Use the interpolation function to align the other events or extrapolate the corrected time base for analog systems.
 
@@ -138,6 +99,48 @@ Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/
 ## Probe handling and soldering
 
 [General soldering tips](http://billkarsh.github.io/SpikeGLX/help/solder/solder/) from Bill Karsh
+
+
+
+#### References for harware:
+
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+|Purchase probes and hardware | **Hardware** | [Neuropixels.org](https://www.neuropixels.org/) | imec |
+|What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
+|**MANUAL for the 3.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
+
+#### References for acquisition software:
+
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+|Download software, overall reference, how-to videos | **Software** | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh|
+| Download and use software | Software |  [Open-ephys PXI](https://open-ephys.github.io/gui-docs/User-Manual/Plugins/Neuropixels-PXI.html) | Josh Siegle|
+
+
+#### General references and courses:
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+| Neuropixels wiki | General/Getting started |  [Neuropixels WIKI](https://github.com/cortex-lab/neuropixels/wiki) | Nick Steinmetz |
+| Ask for help, share knowledge, stay up to date | **General/Slack** | [Neuropixels Slack](https://neuropixelsgroup.slack.com/join/shared_invite/zt-1jibcdbhe-uNyp8q522L4S0apVKwoC6A#/shared-invite/email) | Community? |
+|UCL course Youtube videos | **General/Getting started** | [UCL courses](https://www.youtube.com/channel/UCChkhcGBVElY8KLqIYc00gw/playlists) | Cortex Lab|
+|Allen Mindscope and ephys course | In-person course | [Allen course](https://alleninstitute.org/events/2022-neuropixels-and-openscope-workshop/) | Allen Institute|
+|General course with Neuropixels workshop | In-person course (general) | [Optical Imaging and Electrophysiological Recording in Neuroscience](https://parisneuro.ovh/) | Boris Barbour |
+
+#### References for post-processing and analysis:
+
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+|Pipeline to do preprocessing with SpikeGLX tools | **Post-processing and sorting** | [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting)| Jennifer Colonell|
+|Tutorial of how to sort neuropixels with SpikeInterface | **Post-processing and sorting** | [SpikeInterface](https://spikeinterface.readthedocs.io/en/latest/how_to/analyse_neuropixels.html) | SpikeInterface team|
+|Allen pipeline for spike sorting | Post-processing and sorting | [ecephys](https://github.com/AllenInstitute/ecephys_spike_sorting) | Allen Institute|
+|Kilosort spike sorting algorithm | Sorting | [Kilosort](https://github.com/MouseLand/Kilosort)| Marius Pachitarius|
+|MountainSort spike sorting algorithm | Sorting | [MountainSort](https://github.com/flatironinstitute/mountainsort5) | Jeremy Magland|
+|IronClust spike sorting algorithm | Sorting| [IronClust](https://github.com/flatironinstitute/ironclust) | James Jun and Jeremy Magland |
+|Tutorial on how to use Phy for manual curation |  **Manual curation** | [Manual curation with phy](https://phy.readthedocs.io/en/latest/sorting_user_guide/) | Nick Steinmetz |
+| Allen Visual Coding neuropixels tutorial| Tutorial |  [Allen Neuropixels](https://allensdk.readthedocs.io/en/latest/visual_coding_neuropixels.html) | Allen Institute|
+| Tutorial to look at data with CellExplorer| Tutorial | [Cell Explorer](https://cellexplorer.org/tutorials/neuropixels-tutorial/) | Peter Petersen|
+
 
 
 Joao Couto - June 2023
