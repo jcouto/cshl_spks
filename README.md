@@ -4,6 +4,8 @@ Practical information about Neuropixels recordings for the 2023 course. This lis
 
 These pages have some materials and references for anyone wanting to dig into how to build a setup, understand how data are acquired, and preprocess data.
 
+Here are the **cheatsheets** for [hardware reference](sheets/recording_system_overview.png) and [sychronization with external hardware](sheets/sync_overview.png).
+
 #### References for harware:
 
 | Resource | Category | Link | Maintainer |
@@ -129,7 +131,7 @@ A solution is to interpolate the onsets of the SMA pulse (in the neuropixels mod
 
 ![picture](images/sync_fix.png)
 
-Use the interpolation function to align the other events or extrapolate the corrected time.
+Use the interpolation function to align the other events or extrapolate the corrected time base for analog systems.
 
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
@@ -138,3 +140,4 @@ Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/
 [General soldering tips](http://billkarsh.github.io/SpikeGLX/help/solder/solder/) from Bill Karsh
 
 
+Joao Couto - June 2023
