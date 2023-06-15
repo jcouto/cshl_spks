@@ -6,9 +6,12 @@ These pages have some materials and references for anyone wanting to dig into ho
 
 ### References:
 
- | Category | Reference | Who maintains it? | What can I find there? 
- | Software | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh | Download software and great reference overall.
- | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | What to buy and how to configure a system 
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+|What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
+|Download software, overall reference, how-to videos | Software | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh|
+| Download and use software | Software |  [Open-ephys PXI](https://open-ephys.github.io/gui-docs/User-Manual/Plugins/Neuropixels-PXI.html) | Josh Siegle|
+
 
 ## Hardware description
 
