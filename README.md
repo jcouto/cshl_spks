@@ -45,6 +45,14 @@ These pages have some materials and references for anyone wanting to dig into ho
 
 ## Hardware description
 
+The recording hardware is modular, we will describe what different parts of the probe are for:
+1. the shank,
+2. the probe base,
+3. the headstage, and
+4. the basestation (a.k.a. Neuropixels module)
+
+![picture](images/probes_illustration.png)
+
 
 ## Syncronizing data with external streams
 
