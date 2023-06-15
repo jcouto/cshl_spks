@@ -84,7 +84,6 @@ In the PXI system, this can be done in 2 ways:
 
 **Clock drift** happens when recording with multiple streams or using different clocks. It is more visible in long recordings so if triggering each trial one may not see it.
 
-
  <img src="images/sync_clocks.png" width="500">
 
 The times of one stream (2) need to be corrected to the timing of the other stream (1).
@@ -96,17 +95,31 @@ Use the interpolation function to align the other events or extrapolate the corr
 
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
-## Probe handling and soldering
+# What is a binary file and how are data stored
+
+Here we describe the SpikeGLX format.
+Binary files are not only used by SpikeGLX, they are common for many imaging and data acquisition applications. They are specially good for cases when you want to record data fast, without loosing information and want to be able to quickly access it.
+
+
+
+
+# Probe handling and soldering
+
+Here are some pratical suggestions for handling probes (some pictures we take during the course can go here):
+
+ - probes are safer in the box; **test first with the probes in the box**. Connect a headstage to the flex of the probe while it is in the box if you need to test it.
+ - touch a grounded piece of metal **before touching probes** to prevent electrostatic discharge.
+ - always **align the shank to the axis of probe insertion** (manipulator). This can be done by carefully aligning the probes or using the probe cap and holder.  
+ - tapeing probes to a table is a way of safely ways to solder it. Make sure not to heat-up the flex (use a toothpick to elevate the flex if needed).
 
 [General soldering tips](http://billkarsh.github.io/SpikeGLX/help/solder/solder/) from Bill Karsh
-
 
 
 #### References for harware:
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
-|Purchase probes and hardware | **Hardware** | [Neuropixels.org](https://www.neuropixels.org/) | imec |
+|**Purchase probes and hardware** | Hardware | [Neuropixels.org](https://www.neuropixels.org/) | imec |
 |What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
 |**MANUAL for the 3.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
 
@@ -114,7 +127,7 @@ Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
-|Download software, overall reference, how-to videos | **Software** | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh|
+|**Download software, overall reference, how-to videos** | Software | [SpikeGLX](https://billkarsh.github.io/SpikeGLX/) | Bill Karsh|
 | Download and use software | Software |  [Open-ephys PXI](https://open-ephys.github.io/gui-docs/User-Manual/Plugins/Neuropixels-PXI.html) | Josh Siegle|
 
 
@@ -122,8 +135,8 @@ Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
 | Neuropixels wiki | General/Getting started |  [Neuropixels WIKI](https://github.com/cortex-lab/neuropixels/wiki) | Nick Steinmetz |
-| Ask for help, share knowledge, stay up to date | **General/Slack** | [Neuropixels Slack](https://neuropixelsgroup.slack.com/join/shared_invite/zt-1jibcdbhe-uNyp8q522L4S0apVKwoC6A#/shared-invite/email) | Community? |
-|UCL course Youtube videos | **General/Getting started** | [UCL courses](https://www.youtube.com/channel/UCChkhcGBVElY8KLqIYc00gw/playlists) | Cortex Lab|
+| **Ask for help, share knowledge, stay up to date** | General/Slack | [Neuropixels Slack](https://neuropixelsgroup.slack.com/join/shared_invite/zt-1jibcdbhe-uNyp8q522L4S0apVKwoC6A#/shared-invite/email) | Community? |
+|**UCL course videos** | General/Getting started | [UCL courses](https://www.youtube.com/channel/UCChkhcGBVElY8KLqIYc00gw/playlists) | Cortex Lab|
 |Allen Mindscope and ephys course | In-person course | [Allen course](https://alleninstitute.org/events/2022-neuropixels-and-openscope-workshop/) | Allen Institute|
 |General course with Neuropixels workshop | In-person course (general) | [Optical Imaging and Electrophysiological Recording in Neuroscience](https://parisneuro.ovh/) | Boris Barbour |
 
@@ -131,8 +144,8 @@ Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
-|Pipeline to do preprocessing with SpikeGLX tools | **Post-processing and sorting** | [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting)| Jennifer Colonell|
-|Tutorial of how to sort neuropixels with SpikeInterface | **Post-processing and sorting** | [SpikeInterface](https://spikeinterface.readthedocs.io/en/latest/how_to/analyse_neuropixels.html) | SpikeInterface team|
+|**Pipeline to do preprocessing with SpikeGLX tools** | Post-processing and sorting | [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting)| Jennifer Colonell|
+|**Tutorial of how to sort neuropixels with SpikeInterface** | Post-processing and sorting | [SpikeInterface](https://spikeinterface.readthedocs.io/en/latest/how_to/analyse_neuropixels.html) | SpikeInterface team|
 |Allen pipeline for spike sorting | Post-processing and sorting | [ecephys](https://github.com/AllenInstitute/ecephys_spike_sorting) | Allen Institute|
 |Kilosort spike sorting algorithm | Sorting | [Kilosort](https://github.com/MouseLand/Kilosort)| Marius Pachitarius|
 |MountainSort spike sorting algorithm | Sorting | [MountainSort](https://github.com/flatironinstitute/mountainsort5) | Jeremy Magland|
