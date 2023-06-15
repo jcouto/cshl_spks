@@ -114,8 +114,9 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 
 [General soldering tips](http://billkarsh.github.io/SpikeGLX/help/solder/solder/) from Bill Karsh
 
+# References and links:
 
-#### References for harware:
+#### Hardware:
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
@@ -123,7 +124,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 |What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
 |**MANUAL for the 3.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
 
-#### References for acquisition software:
+#### Acquisition software:
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
@@ -131,7 +132,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 | Download and use software | Software |  [Open-ephys PXI](https://open-ephys.github.io/gui-docs/User-Manual/Plugins/Neuropixels-PXI.html) | Josh Siegle|
 
 
-#### General references and courses:
+#### General and courses:
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
 | Neuropixels wiki | General/Getting started |  [Neuropixels WIKI](https://github.com/cortex-lab/neuropixels/wiki) | Nick Steinmetz |
@@ -140,7 +141,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 |Allen Mindscope and ephys course | In-person course | [Allen course](https://alleninstitute.org/events/2022-neuropixels-and-openscope-workshop/) | Allen Institute|
 |General course with Neuropixels workshop | In-person course (general) | [Optical Imaging and Electrophysiological Recording in Neuroscience](https://parisneuro.ovh/) | Boris Barbour |
 
-#### References for post-processing and analysis:
+#### Post-processing and analysis:
 
 | Resource | Category | Link | Maintainer |
 | --- | --- | --- | --- |
