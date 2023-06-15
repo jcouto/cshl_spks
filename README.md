@@ -69,32 +69,7 @@ The image below is a quick reference for how to interpret the LED's in the devic
 
 <img src="images/neuropixels_module_illustration.png" width="700">
 
-# Syncronizing data with external streams
-
-It is critical to be able to relate neural signals with external variables to try to relate brain activity to behavior.
-
-In the PXI system, this can be done in 2 ways:
-
- 1. the neuropixel module can receive a sync signal (e.g. the trial start) that gets recorded with the probe streams. This signal can then be used to know when an external event happened in the time base of the neural signals.
- 2. **preferred** - the neuropixels module can send a signal when the probe starts acquiring data, that signal is then used to trigger all streams and to correct for any drift in clock between the streams. One can then connect multiple external signals and capture those in the same corrected time base. 
-
-<img src="images/sync_handling.png" width="600">
-
-
-**Clock drift** happens when recording with multiple streams or using different clocks. It is more visible in long recordings so if triggering each trial one may not see it.
-
- <img src="images/sync_clocks.png" width="500">
-
-The times of one stream (2) need to be corrected to the timing of the other stream (1).
-A solution is to interpolate the onsets of the SMA pulse (in the neuropixels module) or another sync pulse generator that is captured on all streams.
- 
-<img src="images/sync_fix.png" width="500">
-
-Use the interpolation function to align the other events or extrapolate the corrected time base for analog systems.
-
-Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
-
-# Binary files and data storage
+# Binary files and raw data 
 
 SpikeGLX stores raw data in binary files **.bin** accompanied by a text file **.meta** that contains information about the recording. It is useful to understand how data are stored and how to access raw data directly.
 
@@ -142,6 +117,31 @@ for i,ichan in enumerate(range(0,dat.shape[1],20)):
     y -= y.mean()
     plt.plot(idx/srate,y+i*200,'k')
 ```
+
+# Syncronizing data with external streams
+
+It is critical to be able to relate neural signals with external variables to try to relate brain activity to behavior.
+
+In the PXI system, this can be done in 2 ways:
+
+ 1. the neuropixel module can receive a sync signal (e.g. the trial start) that gets recorded with the probe streams. This signal can then be used to know when an external event happened in the time base of the neural signals.
+ 2. **preferred** - the neuropixels module can send a signal when the probe starts acquiring data, that signal is then used to trigger all streams and to correct for any drift in clock between the streams. One can then connect multiple external signals and capture those in the same corrected time base. 
+
+<img src="images/sync_handling.png" width="600">
+
+
+**Clock drift** happens when recording with multiple streams or using different clocks. It is more visible in long recordings so if triggering each trial one may not see it.
+
+ <img src="images/sync_clocks.png" width="500">
+
+The times of one stream (2) need to be corrected to the timing of the other stream (1).
+A solution is to interpolate the onsets of the SMA pulse (in the neuropixels module) or another sync pulse generator that is captured on all streams.
+ 
+<img src="images/sync_fix.png" width="500">
+
+Use the interpolation function to align the other events or extrapolate the corrected time base for analog systems.
+
+Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
 
 # Probe handling and soldering
