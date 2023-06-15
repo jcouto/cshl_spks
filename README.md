@@ -1,6 +1,6 @@
 # Neuropixels workshop - CSHL Ion Channels in Synaptic and Neural Circuit Physiology
 
-Practical information about Neuropixels recordings for the 2023 course. This list and examples were compiled by Joao Couto (UCLA) and the course was taught by Tim Harris (HHMI, Janelia). 
+Practical information about Neuropixels recordings for the 2023 course compiled by Joao Couto (UCLA) and Tim Harris (HHMI Janelia). 
 
 These pages have some materials and references for anyone wanting to dig into how to build a setup, understand how data are acquired, and preprocess data.
 
@@ -95,10 +95,21 @@ Use the interpolation function to align the other events or extrapolate the corr
 
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
-# What is a binary file and how are data stored
+# Binary files and memory mapping
 
-Here we describe the SpikeGLX format.
-Binary files are not only used by SpikeGLX, they are common for many imaging and data acquisition applications. They are specially good for cases when you want to record data fast, without loosing information and want to be able to quickly access it.
+Binary files are not only used by SpikeGLX, they are common for many imaging and data acquisition applications. They are specially good for cases when you want to record data fast, and without compression, so you can quickly access it.
+
+SpikeGLX stores raw data in binary files **.bin** accompanied by a text file **.meta** that contains information about the recording.
+
+In binary files, data are stored sample by sample with **16-bit precision**.
+
+<img src="images/bin_stream.png" width="800">
+
+These can be reshaped as an array.
+
+<img src="images/bin_array.png" width="500">
+
+
 
 
 
