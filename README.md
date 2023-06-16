@@ -163,7 +163,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 | --- | --- | --- | --- |
 |**Purchase probes and hardware** | Hardware | [Neuropixels.org](https://www.neuropixels.org/) | imec |
 |What to buy and how to configure a system | Hardware | [SpikeGLX - PXI system requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) | Bill Karsh | 
-|**MANUAL for the 3.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
+|**MANUAL for the 1.0 probes** | Documentation | [Manual](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) | imec
 
 #### Acquisition software:
 
