@@ -144,6 +144,17 @@ Use the interpolation function to align the other events or extrapolate the corr
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
 
+# Loading data and plotting
+
+## Spike drift map
+
+## Average waveforms
+
+## Average peri-event histograms (PSTHs)
+
+## Rasters aligned to the stimulus
+
+
 # Probe handling and soldering
 
 Here are some pratical suggestions for handling probes (some pictures we take during the course can go here):
@@ -187,7 +198,7 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 | --- | --- | --- | --- |
 |Allen protocol for acute recordings with multiple neuropixels | Acute protocol | [Durant et al. 2021](https://www.nature.com/articles/s41596-022-00768-6)| Nature Protocols |
 |  Chronic implant for 1.0 | Chronic design | [Juavinett et al. 2019](https://elifesciences.org/articles/47188)| eLife |
-| Chronic implant for 1.0 for mice and rats | Chronic design | [Luo, Bondi et al. 2019](https://elifesciences.org/articles/59716)) | eLife |
+| Chronic implant for 1.0 for mice and rats | Chronic design | [Luo, Bondi et al. 2019](https://elifesciences.org/articles/59716) | eLife |
 | Chronic implant for mice and rats 1.0 and 2.0 | Chronic design | [van Daal, Aydin, Michon et al. 2021](https://www.nature.com/articles/s41596-021-00539-9) | Nature protocols |
 | Chronic implant with multiple parts | Chronic design | [Jones 2023](https://www.protocols.io/view/chronic-recoverable-neuropixels-in-mice-e6nvwjo87lmk/v1) | protocols.io |
 
