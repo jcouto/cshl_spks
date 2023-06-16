@@ -182,6 +182,16 @@ Here are some pratical suggestions for handling probes (some pictures we take du
 |Allen Mindscope and ephys course | In-person course | [Allen course](https://alleninstitute.org/events/2022-neuropixels-and-openscope-workshop/) | Allen Institute|
 |General course with Neuropixels workshop | In-person course (general) | [Optical Imaging and Electrophysiological Recording in Neuroscience](https://parisneuro.ovh/) | Boris Barbour |
 
+#### Surgery and other protocols
+| Resource | Category | Link | Maintainer |
+| --- | --- | --- | --- |
+|Allen protocol for acute recordings with multiple neuropixels | Acute protocol | [Durant et al. 2021](https://www.nature.com/articles/s41596-022-00768-6)| Nature Protocols |
+|  Chronic implant for 1.0 | Chronic design | [Juavinett et al. 2019](https://elifesciences.org/articles/47188)| eLife |
+| Chronic implant for 1.0 for mice and rats | Chronic design | [Luo, Bondi et al. 2019](https://elifesciences.org/articles/59716)) | eLife |
+| Chronic implant for mice and rats 1.0 and 2.0 | Chronic design | [van Daal, Aydin, Michon et al. 2021](https://www.nature.com/articles/s41596-021-00539-9) | Nature protocols |
+| Chronic implant with multiple parts | Chronic design | [Jones 2023](https://www.protocols.io/view/chronic-recoverable-neuropixels-in-mice-e6nvwjo87lmk/v1) | protocols.io |
+
+
 #### Post-processing and analysis:
 
 | Resource | Category | Link | Maintainer |
