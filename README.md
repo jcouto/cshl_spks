@@ -20,7 +20,7 @@ The main difference between Neuropixels and typical recording devices is that th
 
 In typical systems, the shank has just passive wires to the electrodes and the signals are amplified in the headstage, and then further digitized close to the computer.
 
-In the case of Neuropixels, the shank and the probe base make up the ASIC; the headstage transmits already digitized data to an acquisition module that syncronizes data from different streams and sends it to the computer. Digitization happens very close to the brain with Neuropixels - leaving less space for noise and interference. 
+In the case of Neuropixels, the shank and the probe base make up the ASIC; the headstage transmits already digitized data to an acquisition module that synchronizes data from different streams and sends it to the computer. Digitization happens very close to the brain with Neuropixels - leaving less space for noise and interference. 
 
 To learn more about how this works dig into the Neuropixels [MANUAL](https://www.neuropixels.org/_files/ugd/832f20_ba7f3e9e639b49809458cf64d76abdcc.pdf) and [Putzeys et al. 2019](https://ieeexplore.ieee.org/document/8846063/)
 
@@ -64,7 +64,7 @@ The **PXI system** consists of:
 
 Of course you'll also need a computer. The [hardware requirements](https://github.com/billkarsh/SpikeGLX/blob/master/Markdown/SystemRequirements_PXI.md) for PXI systems are described in detail by Bill Karsh (author of SpikeGLX, that is working with Tim Harris at HHMI Janelia).
 
-The **neuropixels module** is an FPGA device that handles syncronization and reads data from the headstages. It can connect to up to 8 NP2.0 probes or 4 NP1.0.
+The **neuropixels module** is an FPGA device that handles synchronization and reads data from the headstages. It can connect to up to 8 NP2.0 probes or 4 NP1.0.
 The image below is a quick reference for how to interpret the LED's in the device.
 
 <img src="images/neuropixels_module_illustration.png" width="700">
@@ -118,7 +118,7 @@ for i,ichan in enumerate(range(0,dat.shape[1],20)):
     plt.plot(idx/srate,y+i*200,'k')
 ```
 
-# Syncronizing data with external streams
+# Synchronizing data with external streams
 
 It is critical to be able to relate neural signals with external variables to try to relate brain activity to behavior.
 
@@ -143,6 +143,83 @@ Use the interpolation function to align the other events or extrapolate the corr
 
 Note than the [SpikeGLX “calibration”](https://billkarsh.github.io/SpikeGLX/help/syncEdges/Sync_edges/) has a nice description of this, reduces clock differences to the milisecond range by measuring the offset between the 2 clocks and **provides tools to fix it**. CatGT can be used to return interpolated streams i.e. perfectly match the clocks as described here; see also [ecephys_spike_sorting](https://github.com/jenniferColonell/ecephys_spike_sorting).
 
+The correction can be done by reading the onsets from the file. We provide functions to load spikeglx binary files and unpack the bits in last channel (which is the sync channel on the probes and the DAQ stream).
+
+To load the files:
+```python
+from tqdm import tqdm   # to plot a progress bar
+# these are the functions we'll need to read and unpack binary files
+from spks import load_spikeglx_binary, unpack_npix_sync, list_spikeglx_files
+
+folder = 'path to the experiment folder'
+
+# load the AP channel for each probe and extract the onsets and offsets from the binary files
+aps = []
+apmetas = []
+aponsets = []
+apoffsets = []
+
+for file in tqdm(apfiles):
+    b = load_spikeglx_binary(file)
+    aps.append(b[0])
+    apmetas.append(b[1])
+    o,f = unpack_npix_sync(b[0][:,-1])
+    # load onsets for each probe
+    aponsets.append(o)
+    apoffsets.append(f)
+# load the NIDQ channel and extract the onsets/offsets
+nidq,nidqmeta = load_spikeglx_binary(nidqfile)
+nidqonsets,nidqoffsets = unpack_npix_sync(nidq[:,-1])
+```
+
+Each sync channel can host 8 digital channels, so we need to find which og these digital channels is used:
+
+```python
+# Print how many onsets and offsets are in each probe
+print('\nPROBES:')
+for i,ons in enumerate(aponsets):
+    for k in ons.keys():
+        npulses = len(ons[k])
+        print(f'\t- imec{i} has {npulses} on channel {k}')
+# and on the daq digital channels
+print('\nDAQ:')
+for k in nidqonsets.keys():
+    npulses = len(nidqonsets[k])
+    print(f'\t - has {npulses} on channel {k}')
+# by inspecting the outputs, we know that the 
+apsyncchannel = 6
+nidqsyncchannel = 7
+```
+
+To interpolate we can simply use the interp1d function from scipy
+
+```python
+# interpolate data to the first probe 
+from scipy.interpolate import interp1d
+apcorrections = []
+syncpulses = aponsets[0][apsyncchannel]/apmetas[0]['sRateHz'] # these are the pulses to interpolate to
+for pulses in aponsets:
+    apcorrections.append(interp1d(pulses[apsyncchannel],
+                                  syncpulses, fill_value='extrapolate')) # in samples
+nidqcorrection = interp1d(nidqonsets[nidqsyncchannel],
+                                  syncpulses, fill_value='extrapolate') # in samples
+
+```
+
+We can now see how far the sync pulses are in each clock. By printing the diference between sync pulses in each stream.
+
+```python
+# lets plot how far off we were for each probe
+for iprobe,pulses in enumerate(aponsets):
+    plt.figure(figsize=[8,3])
+    plt.plot((syncpulses-pulses[apsyncchannel]/apmetas[iprobe]['sRateHz'])*1000,'ko',label='measured',alpha=0.5)
+    plt.plot((syncpulses-apcorrections[iprobe](pulses[apsyncchannel]))*1000,'r.',label='corrected',alpha=0.5)
+    plt.ylim([-5,5])
+    plt.xlabel('time in experiment (s)')
+    plt.ylabel('measured-corrected (ms)')
+# now for the nidaq
+plt.plot((syncpulses-nidqcorrection(nidqonsets[nidqsyncchannel]))*1000,'r.',label='corrected',alpha=0.5)
+```
 
 # Loading data and plotting
 
