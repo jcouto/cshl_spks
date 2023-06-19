@@ -283,11 +283,10 @@ plt.ylabel('Recording depth (um)')
 plt.xlabel('Time (in samples)')
 ```
 
-## Average waveforms
+## Average peri-event histograms (PSTHs) and rasters aligned to the stimuli
 
-## Average peri-event histograms (PSTHs)
+Check the [tutorials](tutorials)
 
-## Rasters aligned to the stimulus
 
 
 # Probe handling and soldering
