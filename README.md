@@ -221,9 +221,67 @@ for iprobe,pulses in enumerate(aponsets):
 plt.plot((syncpulses-nidqcorrection(nidqonsets[nidqsyncchannel]))*1000,'r.',label='corrected',alpha=0.5)
 ```
 
-# Loading data and plotting
+# Loading data and plotting basic features
+
+After spike sorting (and manual inspection) one can load data and plot. Data in [phy](https://phy.readthedocs.io/en/latest/) format (Cyrille Rossant) are basically a set of numpy files organized in a folder, here is how you can read it using numpy functions.
+
+```python
+def load_phy_folder(folder):
+    '''
+    Phy stores data as .npy and tab separated (.tsv) files in a folder.
+
+    This function reads the spike times and cluster identities from a folder and 
+computes the spike amplitudes and approximate spike locations (XY).
+
+    This is an approximate way of computing the spike depths since we don't 
+actually read the waveforms (so it is fast); we use the templates instead.
+
+Example:
+ 
+spike_times,spike_clusters,spike_amplitudes,spike_positions,templates_raw,templates_position = load_phy_folder(folder)
+ 
+    '''
+    # load the channel locations
+    channel_pos =  np.load(pjoin(sortfolder,'channel_positions.npy'))
+    # load each spike cluster number
+    spike_clusters = np.load(pjoin(sortfolder,'spike_clusters.npy'))
+    # load spiketimes
+    spike_times = np.load(pjoin(sortfolder,'spike_times.npy'))
+    # load spike templates (which template was fitted)
+    spike_templates = np.load(pjoin(sortfolder,'spike_templates.npy'))
+    # load the templates used to extract the spikes
+    templates =  np.load(pjoin(sortfolder,'templates.npy'))
+    # Load the amplitudes used to fit the template
+    spike_template_amplitudes = np.load(pjoin(sortfolder,'amplitudes.npy'))
+    # load the whitening matrix (to correct for the data having been whitened)
+    whitening_matrix = np.load(pjoin(sortfolder,'whitening_mat_inv.npy')).T
+    # the raw templates are the dot product of the templates by the whitening matrix
+    templates_raw = np.dot(templates,whitening_matrix)
+    # compute the peak to peak of each template
+    templates_peak_to_peak = (templates_raw.max(axis = 1) - templates_raw.min(axis = 1))
+    # the amplitude of each template is the max of the peak difference for all channels
+    templates_amplitude = templates_peak_to_peak.max(axis=1)
+    # compute the center of mass (X,Y) of the templates
+    template_position = [templates_peak_to_peak*pos for pos in channel_pos.T]
+    template_position = np.vstack([np.sum(t,axis =1 )/np.sum(templates_peak_to_peak,axis = 1) 
+                                   for t in template_position]).T
+    # get the spike positions and amplitudes from the average templates 
+    spike_amplitudes = templates_amplitude[spike_templates]*spike_template_amplitudes
+    spike_positions = template_position[spike_templates,:].squeeze()
+    return spike_times,spike_clusters,spike_amplitudes,spike_positions,templates_raw,template_position
+ ``` 
 
 ## Spike drift map
+
+```python
+sortfolder = 'path to the phy folder'
+spike_times,spike_clusters,spike_amplitudes,spike_positions,templates,templates_position = load_phy_folder(folder)
+# plot the spiketimes versus the spike positions
+plt.figure(figsize = [10,3])
+plt.plot(spike_times,spike_positions[:,1],'.k',markersize = 0.5,alpha = 0.1)
+plt.ylabel('Recording depth (um)')
+plt.xlabel('Time (in samples)')
+```
 
 ## Average waveforms
 
