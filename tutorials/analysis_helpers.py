@@ -2,7 +2,6 @@ import os
 import numpy as np
 from os.path import join as pjoin
 from tqdm import tqdm
-from natsort import natsorted
 from glob import glob
 import pandas as pd
 
